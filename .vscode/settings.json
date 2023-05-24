@@ -1,0 +1,15 @@
+{
+	"editor.insertSpaces": false,
+	"files.associations": {
+		"main.h": "c",
+		"typeinfo": "c",
+		"dirent.h": "c",
+		"stat.h": "c",
+		"waitstatus.h": "c",
+		"types.h": "c",
+		"concepts": "c",
+		"cstdio": "c",
+		"type_traits": "c",
+		"new": "c"
+	}
+}
