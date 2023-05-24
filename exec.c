@@ -6,23 +6,24 @@
  *
  * @argv: command args
  * @commands: origin commands
+ * @gb: globals
  *
  * Return: 0 = success, 1 = error
  */
-int runcmd(char **commands, char **argv)
+int runcmd(char **commands, char **argv, glob_t *gb)
 {
 	pid_t pid;
 	int status;
 	char *cmd_path;
-	int (*builtin_func)(char **, int, char **) = is_builtin(argv[0]);
+	int (*builtin_func)(char **, int, char **, glob_t *) = is_builtin(argv[0]);
 
 	if (builtin_func != NULL)
-		return (exec_builtin(commands, builtin_func, argv));
+		return (exec_builtin(commands, builtin_func, gb, argv));
 
-	cmd_path = which(argv[0]);
+	cmd_path = which(argv[0], gb);
 	if (cmd_path == NULL)
 	{
-		printf("%s: No such file or directory\n", name);
+		cmd_404_error(argv[0], gb);
 		return (1);
 	}
 	pid = fork();
@@ -33,8 +34,8 @@ int runcmd(char **commands, char **argv)
 	}
 	if (pid == 0)
 	{
-		if (execve(cmd_path, argv, environ) == -1)
-			perror(name);
+		if (execve(cmd_path, argv, gb->environ) == -1)
+			perror(gb->name);
 		exit(1);
 	}
 	else

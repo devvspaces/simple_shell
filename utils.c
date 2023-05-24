@@ -16,14 +16,16 @@ size_t in_char(int n)
 /**
  * free_env - clear global env
  * memory
+ *
+ * @gb: globals
  */
-void free_env(void)
+void free_env(glob_t *gb)
 {
 	int i = 0;
 
-	for (; environ[i] != NULL; i++)
-		free(environ[i]);
-	free(environ);
+	for (; gb->environ[i] != NULL; i++)
+		free(gb->environ[i]);
+	free(gb->environ);
 }
 
 /**
@@ -37,6 +39,9 @@ void free_argv(char **argv)
 	int i = 0;
 
 	for (; argv[i] != NULL; i++)
+	{
+		/* printf("Freeing: %s %p--\n", argv[i], (void *)argv[i]); */
 		free(argv[i]);
+	}
 	free(argv);
 }

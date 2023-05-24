@@ -71,7 +71,7 @@ char **clone_env()
 
 	for (; __environ[len] != NULL; len++)
 	{
-		env_clone[len] = malloc(in_char(_strlen(__environ[len]) + 1));
+		env_clone[len] = malloc(_strlen(__environ[len]) + 1);
 		if (env_clone[len] == NULL)
 		{
 			for (len--; len >= 0; len--)
@@ -93,39 +93,34 @@ char **clone_env()
  * @name: env key to set
  * @value: value to add or update
  * @overwrite: if nonzero update env
+ * @gb: globals
  *
  * Return: 0 = success, -1 = error
  */
-int _setenv(const char *name, const char *value, int overwrite)
+int _setenv(const char *name, const char *value, int overwrite, glob_t *gb)
 {
 	char *new_env;
-	int len = 0, env_len = count_nt_list(environ);
-	size_t namelen;
+	int env_len = count_nt_list(gb->environ), idx;
+	char **new_mem;
 
 	new_env = combined_value(name, value);
 	if (new_env == NULL)
 		return (-1);
-	namelen = _strlen(name);
 
-	if (_getenv(name) == NULL)
+	idx = _getenv_idx(name, gb);
+	if (idx == -1)
 	{
-		environ = _realloc(environ, in_char(env_len + 1), in_char(env_len + 200));
-		if (environ == NULL)
-		{
-			free_env();
-			return (-1);
-		}
-		environ[env_len] = new_env;
-		environ[env_len + 1] = NULL;
+		new_mem = _realloc(gb->environ, in_char(env_len + 1), in_char(env_len + 2));
+		if (new_mem == NULL)
+			return (free(new_mem), -1);
+		gb->environ = new_mem;
+		gb->environ[env_len] = new_env;
+		gb->environ[env_len + 1] = NULL;
 	}
 	else if (overwrite > 0)
 	{
-		for (; environ[len] != NULL; len++)
-			if (_strncmp(environ[len], name, namelen) == 0)
-			{
-				free(environ[len]);
-				environ[len] = new_env;
-			}
+		free(gb->environ[idx]);
+		gb->environ[idx] = new_env;
 	}
 	else
 		free(new_env);

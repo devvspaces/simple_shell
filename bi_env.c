@@ -7,16 +7,17 @@
  * @ac: number of args
  * @argv: command args
  * @cmd: origin commands
+ * @gb: globals
  *
  * Return: 0 = success, 1 = error
  */
-int _bi_env(char **cmd, int ac, char **argv)
+int _bi_env(char **cmd, int ac, char **argv, glob_t *gb)
 {
 	int i = 0;
 
-	while (__environ[i] != NULL)
+	while (gb->environ[i] != NULL)
 	{
-		write_stdout(__environ[i]);
+		write_stdout(gb->environ[i]);
 		write_stdout("\n");
 		i++;
 	}

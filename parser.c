@@ -58,7 +58,7 @@ char **parse_commands_delim(char *command, int cmd_len, char *delim)
 	/* Nullify the last new line character */
 	if (command[cmd_len - 1] == '\n')
 		command[cmd_len - 1] = '\0';
-	argv = malloc(in_char(count_tokens(command) + 1));
+	argv = malloc(in_char(count_tokens_delim(command, delim) + 1));
 	if (argv == NULL)
 	{
 		free(argv);
@@ -67,7 +67,7 @@ char **parse_commands_delim(char *command, int cmd_len, char *delim)
 	tok = _strtok(command, delim);
 	while (tok != NULL)
 	{
-		argv[i] = malloc(in_char(_strlen(tok) + 1));
+		argv[i] = malloc(_strlen(tok) + 1);
 		if (argv[i] == NULL)
 		{
 			for (; i >= 0; i--)

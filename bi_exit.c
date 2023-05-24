@@ -7,34 +7,35 @@
  * @ac: number of args
  * @argv: command args
  * @commands: origin commands
+ * @gb: globals
  *
  * Return: 0 = success, 1 = error
  */
-int _bi_exit(char **commands, int ac, char **argv)
+int _bi_exit(char **commands, int ac, char **argv, glob_t *gb)
 {
 	char *endptr;
-	int status = last_command_status;
+	long int status = (long int)gb->exit_status;
 	long int exit_status;
 
-	if (ac > 2)
-	{
-		write_stderr("Usage: exit [status]\n");
-		return (1);
-	}
-
-	if (ac == 2)
+	if (ac >= 2)
 	{
 		exit_status = strtol(argv[1], &endptr, 10);
 		if (*endptr != '\0' || _isdigit(argv[1][0]))
 		{
-			dprintf(STDERR_FILENO, "exit: Illegal number: %s\n", argv[1]);
+			exit_error(argv[1], gb);
 			return (2);
 		}
-		status = (int)exit_status;
+		if (exit_status > INT_MAX)
+		{
+			exit_error(argv[1], gb);
+			return (2);
+		}
+		status = exit_status;
 	}
 	free_argv(argv);
 	free_argv(commands);
-	free_env();
+	free_env(gb);
+	free(gb);
 	exit(status % 256);
 	(void)ac;
 }

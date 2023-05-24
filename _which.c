@@ -5,11 +5,12 @@
  * to a command
  *
  * @cmd: command arg
+ * @gb: globals
  *
  * Return: pointer to null terminated
  * file path if success else NULL
  */
-char *which(char *cmd)
+char *which(char *cmd, glob_t *gb)
 {
 	char *path_clone, *path, *tok, *file_path;
 	size_t cmd_len;
@@ -17,7 +18,7 @@ char *which(char *cmd)
 
 	if (stat(cmd, &file_stat) == 0)
 		return (clone_str(cmd));
-	path = _getenv("PATH");
+	path = _getenv("PATH", gb);
 	if (path)
 	{
 		cmd_len = _strlen(cmd);

@@ -1,10 +1,5 @@
 #include "main.h"
 
-int last_command_status;
-char *name;
-char **environ;
-int cmd_count;
-
 /**
  * main - my simple shell
  *
@@ -17,15 +12,19 @@ int main(int ac, char **av)
 {
 	char *lineptr = NULL;
 	size_t n = 0;
-	int nstr_read;
-	int atty;
+	int nstr_read, atty;
+	glob_t *gb;
 
-	last_command_status = 0;
-	name = av[0];
-	environ = clone_env();
-	cmd_count = 0;
+	gb = malloc(sizeof(glob_t));
+	if (gb == NULL)
+		return (perror("Memory Error"), free(gb), 1);
 
-	if (environ == NULL)
+	gb->name = av[0];
+	gb->cmd_count = 0;
+	gb->environ = clone_env();
+	gb->exit_status = 0;
+
+	if (gb->environ == NULL)
 		return (1);
 
 	atty = isatty(stdin->_fileno);
@@ -36,18 +35,13 @@ int main(int ac, char **av)
 
 		nstr_read = _getline(&lineptr, &n, stdin);
 		if (nstr_read == -1)
-		{
-			free(lineptr);
-			free_env();
-			exit(last_command_status);
-		}
-		cmd_count++;
-		last_command_status = exec_cmd(lineptr, nstr_read);
+			free(lineptr), free_env(gb), exit(gb->exit_status);
+		gb->cmd_count++;
+		gb->exit_status = exec_cmd(lineptr, nstr_read, gb);
 		n = 0;
 	}
 
-	free(lineptr);
-	free_env();
+	free(lineptr), free_env(gb), free(gb);
 	(void)ac;
-	return (last_command_status);
+	return (gb->exit_status);
 }
