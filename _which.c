@@ -23,7 +23,7 @@ char *which(char *cmd, glob_t *gb)
 	{
 		cmd_len = _strlen(cmd);
 		path_clone = strdup(path);
-		tok = strtok(path_clone, ":");
+		tok = _strtok(path_clone, ":");
 		while (tok != NULL)
 		{
 			file_path = malloc(_strlen(tok) + cmd_len + 2);
@@ -33,18 +33,17 @@ char *which(char *cmd, glob_t *gb)
 				return (NULL);
 			}
 			_strcpy(file_path, tok);
-			strcat(file_path, "/");
-			strcat(file_path, cmd);
-			strcat(file_path, "\0");
+			_strcat(file_path, "/");
+			_strcat(file_path, cmd);
+			_strcat(file_path, "\0");
 			if (stat(file_path, &file_stat) == 0)
 			{
 				free(path_clone);
 				return (file_path);
 			}
-			tok = strtok(NULL, ":");
+			tok = _strtok(NULL, ":");
 			free(file_path);
 		}
-
 		free(path_clone);
 	}
 	return (NULL);

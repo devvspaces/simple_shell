@@ -19,7 +19,7 @@ int _bi_exit(char **commands, int ac, char **argv, glob_t *gb)
 
 	if (ac >= 2)
 	{
-		exit_status = strtol(argv[1], &endptr, 10);
+		exit_status = _strtol(argv[1], &endptr, 10);
 		if (*endptr != '\0' || _isdigit(argv[1][0]))
 		{
 			exit_error(argv[1], gb);
@@ -37,5 +37,4 @@ int _bi_exit(char **commands, int ac, char **argv, glob_t *gb)
 	free_env(gb);
 	free(gb);
 	exit(status % 256);
-	(void)ac;
 }

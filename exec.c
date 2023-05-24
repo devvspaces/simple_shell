@@ -24,7 +24,7 @@ int runcmd(char **commands, char **argv, glob_t *gb)
 	if (cmd_path == NULL)
 	{
 		cmd_404_error(argv[0], gb);
-		return (1);
+		return (127);
 	}
 	pid = fork();
 	if (pid == -1)

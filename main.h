@@ -42,6 +42,7 @@ char *_strcpy(char *dest, char *src);
 int _strlen(const char *str);
 char *clone_str(char *val);
 char *lstrip(char *val, char *tok);
+long _strtol(const char *nptr, char **endptr, int base);
 
 /* Enviroment helpers */
 char **clone_env();

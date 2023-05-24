@@ -12,7 +12,7 @@ int main(int ac, char **av)
 {
 	char *lineptr = NULL;
 	size_t n = 0;
-	int nstr_read, atty;
+	int nstr_read, atty, ext;
 	glob_t *gb;
 
 	gb = malloc(sizeof(glob_t));
@@ -27,15 +27,20 @@ int main(int ac, char **av)
 	if (gb->environ == NULL)
 		return (1);
 
-	atty = isatty(stdin->_fileno);
+	atty = isatty(STDIN_FILENO);
 	while (1)
 	{
 		if (atty == 1)
 			write_stdout("#cisfun$ ");
 
 		nstr_read = _getline(&lineptr, &n, stdin);
+		ext = gb->exit_status;
 		if (nstr_read == -1)
-			free(lineptr), free_env(gb), exit(gb->exit_status);
+		{
+			if (atty == 1)
+				write_stdout("\n");
+			free(lineptr), free_env(gb), free(gb), exit(ext);
+		}
 		gb->cmd_count++;
 		gb->exit_status = exec_cmd(lineptr, nstr_read, gb);
 		n = 0;
