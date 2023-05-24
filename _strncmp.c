@@ -12,7 +12,7 @@
  */
 int _strncmp(const char *s1, const char *s2, int n)
 {
-	int i = 0, r;
+	int i = 0, r = -1;
 
 	while (s1[i] != '\0' && s2[i] != '\0' && n != 0)
 	{

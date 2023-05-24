@@ -60,22 +60,26 @@ char **parse_commands_delim(char *command, int cmd_len, char *delim)
 		command[cmd_len - 1] = '\0';
 	argv = malloc(in_char(count_tokens_delim(command, delim) + 1));
 	if (argv == NULL)
-	{
-		free(argv);
-		return (NULL);
-	}
+		return (free(argv), NULL);
 	tok = _strtok(command, delim);
 	while (tok != NULL)
 	{
-		argv[i] = malloc(_strlen(tok) + 1);
-		if (argv[i] == NULL)
+		tok = lstrip(tok, " ");
+		if (tok[0] != '\0')
 		{
-			for (; i >= 0; i--)
-				free(argv[i]);
-			free(argv);
-			return (NULL);
+			argv[i] = malloc(_strlen(tok) + 1);
+			if (argv[i] == NULL)
+			{
+				for (; i >= 0; i--)
+					free(argv[i]);
+				free(argv);
+				return (NULL);
+			}
+			_strcpy(argv[i], tok);
 		}
-		_strcpy(argv[i], tok);
+		else
+			argv[i] = NULL;
+
 		tok = _strtok(NULL, delim);
 		i++;
 	}

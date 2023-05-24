@@ -158,18 +158,17 @@ int exec_cmd(char *line, int len, glob_t *gb)
 {
 	char **commands, *line_copy;
 	int ptr;
-	int exit_status;
+	int exit_status = 0;
 
 	line_copy = clone_str(line);
 	if (line_copy == NULL)
-		return (free(line), 1);
+		return (free(line_copy), free(line), 1);
 	commands = parse_commands(line_copy, len);
 	free(line_copy);
 	if (commands == NULL)
-		return (1);
+		return (free(line), 1);
 	for (ptr = 0; commands[ptr] != NULL; ptr++)
 	{
-		commands[ptr] = lstrip(commands[ptr], " ");
 		if (_strncmp(commands[ptr], "&&", 2) == 0)
 			syntax_error("&&", gb);
 		else if (_strncmp(commands[ptr], "||", 2) == 0)
@@ -181,7 +180,7 @@ int exec_cmd(char *line, int len, glob_t *gb)
 		if (errno == 127)
 		{
 			errno = 0;
-			return (2);
+			return (free_argv(commands), free(line), 2);
 		}
 	}
 	free_argv(commands);
