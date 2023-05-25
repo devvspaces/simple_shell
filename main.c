@@ -86,7 +86,7 @@ int main(int ac, char **av)
 	fd = ac != 1 ? open_file(av[1], gb) : STDIN_FILENO;
 	if (fd == -1)
 		return (1);
-	
+
 	atty = isatty(fd);
 	while (1)
 	{
