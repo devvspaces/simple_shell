@@ -11,12 +11,12 @@
  *
  * @lineptr: pointer to buffer to populate
  * @n: pointer to size of buffer
- * @stream: file pointer to stream to read from
+ * @fd: file descriptor
  *
  * Return: total number of bytes written to
  * lineptr buffer
  */
-ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
+ssize_t _getline(char **lineptr, size_t *n, int fd)
 {
 	size_t n_read, cur = 0;
 	static char buf[BUFFERSIZE];
@@ -37,7 +37,7 @@ ssize_t _getline(char **lineptr, size_t *n, FILE *stream)
 
 	while (1)
 	{
-		n_read = fread(buf, sizeof(char), BUFFERSIZE, stream);
+		n_read = read(fd, buf, sizeof(char) * BUFFERSIZE);
 
 		if (n_read <= 0)
 			return (-1);

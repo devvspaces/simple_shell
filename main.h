@@ -10,6 +10,7 @@
 #include <sys/wait.h>
 #include <limits.h>
 #include <errno.h>
+#include <fcntl.h>
 
 /**
  * struct alias - A structure that holds information
@@ -91,7 +92,7 @@ void *syntax_format(char cause, glob_t *gb);
 
 /* Read helpers */
 char *_strtok(char *val, char *delim);
-ssize_t _getline(char **lineptr, size_t *n, FILE *stream);
+ssize_t _getline(char **lineptr, size_t *n, int fd);
 int is_delim(char c, const char *delim);
 
 /* Write helpers */
@@ -110,6 +111,7 @@ void cd_error(char *path, glob_t *gb);
 void cmd_404_error(char *path, glob_t *gb);
 void exit_error(char *val, glob_t *gb);
 void syntax_error(char *val, glob_t *gb);
+void file_open_error(char *path, glob_t *gb);
 
 /* Builtins */
 
