@@ -86,6 +86,7 @@ int runcmd(char **cmd, char **argv, glob_t *gb);
 int exec_cmd(char *line, int len, glob_t *gb);
 char *replace_variables(char *cmd, glob_t *gb);
 int check_syntax_error(char *line, glob_t *gb);
+void handle_comment(char *input);
 void *syntax_format(char cause, glob_t *gb);
 
 /* Read helpers */

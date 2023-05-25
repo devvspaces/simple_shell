@@ -141,6 +141,8 @@ int exec_cmd(char *line, int len, glob_t *gb)
 	char **commands;
 	int ptr, exit_status = 0;
 
+	handle_comment(line);
+
 	line = replace_variables(line, gb);
 	if (line == NULL)
 		return (free(line), 1);

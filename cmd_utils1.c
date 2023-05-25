@@ -19,6 +19,44 @@ void *syntax_format(char cause, glob_t *gb)
 }
 
 /**
+ * handle_comment - handle
+ * commenting
+ *
+ * @input: command input
+ */
+void handle_comment(char *input)
+{
+	int inDoubleQuotes = 0;
+	int inSingleQuotes = 0;
+	int inEscape = 0;
+	char *current = input;
+
+	while (*current != '\0')
+	{
+		if (*current == '"')
+		{
+			if (!inEscape && !inSingleQuotes)
+				inDoubleQuotes = !inDoubleQuotes;
+		}
+		else if (*current == '\'')
+		{
+			if (!inEscape && !inDoubleQuotes)
+				inSingleQuotes = !inSingleQuotes;
+		}
+		else if (*current == '#' && !inDoubleQuotes && !inSingleQuotes && !inEscape)
+		{
+			*current = '\0';
+			break;
+		}
+		else if (*current == '\\')
+			inEscape = !inEscape;
+		else
+			inEscape = 0;
+		current++;
+	}
+}
+
+/**
  * replace_variables - replace variables in a command
  *
  * @cmd: command to replace
