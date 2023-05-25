@@ -65,6 +65,9 @@ char *lstrip(char *val, char *tok);
 char *rstrip(char *val, char *tok);
 char *strip(char *val, char *tok);
 long _strtol(const char *nptr, char **endptr, int base);
+char *_strncpy(char *dest, const char *src, int n);
+char *_strstr(char *haystack, const char *needle);
+char *replace(char *str, const char *tok, const char *replacement);
 
 /* Enviroment helpers */
 char **clone_env();
@@ -81,6 +84,9 @@ char **get_str_tokens(char *command, char *delim);
 char *which(char *cmd, glob_t *gb);
 int runcmd(char **cmd, char **argv, glob_t *gb);
 int exec_cmd(char *line, int len, glob_t *gb);
+char *replace_variables(char *cmd, glob_t *gb);
+int check_syntax_error(char *line, glob_t *gb);
+void *syntax_format(char cause, glob_t *gb);
 
 /* Read helpers */
 char *_strtok(char *val, char *delim);
@@ -134,6 +140,7 @@ int _bi_cd(char **cmd, int ac, char **argv, glob_t *gb);
 int _bi_alias(char **cmd, int ac, char **argv, glob_t *gb);
 
 /* Aliases helpers */
+char **spilt_action(char *str);
 void format_alias(char *name, char *value);
 alias_t *new_alias(char *name, char *value);
 alias_t *null_alias(void);

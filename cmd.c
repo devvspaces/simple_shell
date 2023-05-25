@@ -1,24 +1,6 @@
 #include "main.h"
 
 /**
- * syntax_format - print syntax error
- * with cause
- *
- * @cause: syntax problem cause
- * @gb: globals
- *
- * Return: next token before operator
- */
-void *syntax_format(char cause, glob_t *gb)
-{
-	if (cause == '&')
-		syntax_error("&", gb);
-	else
-		syntax_error("|", gb);
-	return (NULL);
-}
-
-/**
  * parse_logical_op - parse out logical
  * operations
  *
@@ -156,41 +138,25 @@ int exec_logical_cmd(char **pcmd, char *cmd, glob_t *gb)
  */
 int exec_cmd(char *line, int len, glob_t *gb)
 {
-	char **commands, *line_copy;
-	int ptr;
-	int exit_status = 0;
+	char **commands;
+	int ptr, exit_status = 0;
 
-	line_copy = clone_str(line);
-	if (line_copy == NULL)
-		return (free(line_copy), free(line), 1);
-	commands = get_str_tokens(line_copy, ";");
-	free(line_copy);
-	if (commands == NULL)
+	line = replace_variables(line, gb);
+	if (line == NULL)
 		return (free(line), 1);
-	for (ptr = 0; commands[ptr] != NULL; ptr++)
-	{
-		if (_strncmp(commands[ptr], "&&", 2) == 0)
-			syntax_error("&&", gb);
-		else if (_strncmp(commands[ptr], "||", 2) == 0)
-			syntax_error("||", gb);
-		else if (commands[ptr][0] == '&')
-			syntax_error("&", gb);
-		else if (commands[ptr][0] == '|')
-			syntax_error("|", gb);
-		if (errno == 127)
-		{
-			errno = 0;
-			return (free_argv(commands), free(line), 2);
-		}
-	}
-	free_argv(commands);
+
+	exit_status = check_syntax_error(line, gb);
+	if (exit_status != 0)
+		return (free(line), exit_status);
 
 	commands = get_str_tokens(line, ";");
 	free(line);
 	if (commands == NULL)
 		return (1);
+
 	for (ptr = 0; commands[ptr] != NULL; ptr++)
 		exit_status = exec_logical_cmd(commands, commands[ptr], gb);
+
 	free_argv(commands), (void)len;
 	return (exit_status);
 }
