@@ -88,29 +88,17 @@ char **parse_commands_delim(char *command, int cmd_len, char *delim)
 }
 
 /**
- * parse_command - parses command to list
+ * get_str_tokens - parses string to list
  * of strings.
  *
- * @command: command to be parsed
- * @cmd_len: length of chars in command
+ * @command: string to be tokenized
+ * @delim: string delimiters
  *
  * Return: list of strings
  */
-char **parse_command(char *command, int cmd_len)
+char **get_str_tokens(char *command, char *delim)
 {
-	return (parse_commands_delim(command, cmd_len, " "));
-}
+	int len = _strlen(command);
 
-/**
- * parse_commands - parses command to list
- * of strings.
- *
- * @command: command to be parsed
- * @cmd_len: length of chars in command
- *
- * Return: array of null terminated commands
- */
-char **parse_commands(char *command, int cmd_len)
-{
-	return (parse_commands_delim(command, cmd_len, ";"));
+	return (parse_commands_delim(command, len, delim));
 }

@@ -6,8 +6,11 @@ CFILES=*.c
 HFILES=*.h
 
 build:
-	betty $(CFILES) $(HFILES)
 	$(CC) $(CFILES) -o $(TARGET)
+
+test:
+	betty $(CFILES) $(HFILES)
+	$(CC) -g $(CFILES) -o $(TARGET)
 
 clean:
 	rm -f $(TARGET)

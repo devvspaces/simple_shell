@@ -12,6 +12,19 @@
 #include <errno.h>
 
 /**
+ * struct alias - A structure that holds information
+ * about an alias
+ *
+ * @name: Alias name
+ * @value: alias value
+ */
+typedef struct alias
+{
+	char *name;
+	char *value;
+} alias_t;
+
+/**
  * struct glob - struct containing data
  * that are dependencies in deep functions
  *
@@ -19,6 +32,7 @@
  * @cmd_count: current command count
  * @exit_status: previous exit status
  * @environ: global enviroment variable
+ * @aliases: aliases variable
  */
 typedef struct glob
 {
@@ -26,6 +40,7 @@ typedef struct glob
 	int cmd_count;
 	int exit_status;
 	char **environ;
+	alias_t **aliases;
 } glob_t;
 
 /* Utilities */
@@ -33,6 +48,11 @@ size_t in_char(int n);
 int count_nt_list(const void *list);
 int _isdigit(char c);
 char *_itoa(int num);
+
+/* Memory freeing utility */
+void free_alias(glob_t *gb);
+void free_env(glob_t *gb);
+void free_argv(char **argv);
 
 /* String helpers */
 char *_strcat(char *dest, const char *src);
@@ -42,11 +62,12 @@ char *_strcpy(char *dest, char *src);
 int _strlen(const char *str);
 char *clone_str(char *val);
 char *lstrip(char *val, char *tok);
+char *rstrip(char *val, char *tok);
+char *strip(char *val, char *tok);
 long _strtol(const char *nptr, char **endptr, int base);
 
 /* Enviroment helpers */
 char **clone_env();
-void free_env(glob_t *gb);
 int _getenv_idx(const char *name, glob_t *gb);
 char *_getenv(const char *name, glob_t *gb);
 int _setenv(const char *name, const char *value, int overwrite, glob_t *gb);
@@ -54,14 +75,12 @@ int _unsetenv(const char *name, glob_t *gb);
 
 /* Parser functions */
 char **parse_commands_delim(char *command, int cmd_len, char *delim);
-char **parse_command(char *command, int cmd_len);
-char **parse_commands(char *command, int cmd_len);
+char **get_str_tokens(char *command, char *delim);
 
 /* Command helpers */
 char *which(char *cmd, glob_t *gb);
 int runcmd(char **cmd, char **argv, glob_t *gb);
 int exec_cmd(char *line, int len, glob_t *gb);
-void free_argv(char **argv);
 
 /* Read helpers */
 char *_strtok(char *val, char *delim);
@@ -112,20 +131,16 @@ int _bi_env(char **cmd, int ac, char **argv, glob_t *gb);
 int _bi_setenv(char **cmd, int ac, char **argv, glob_t *gb);
 int _bi_unsetenv(char **cmd, int ac, char **argv, glob_t *gb);
 int _bi_cd(char **cmd, int ac, char **argv, glob_t *gb);
+int _bi_alias(char **cmd, int ac, char **argv, glob_t *gb);
 
-/* Aliases */
-
-/**
- * struct alias - A structure that holds information
- * about an alias
- *
- * @name: The name of the function
- * @value: alias value
- */
-typedef struct alias
-{
-	char *name;
-	char *value;
-} _alias;
+/* Aliases helpers */
+void format_alias(char *name, char *value);
+alias_t *new_alias(char *name, char *value);
+alias_t *null_alias(void);
+alias_t **init_aliases(void);
+int get_alias_idx(char *name, glob_t *gb);
+char *get_alias(char *name, glob_t *gb);
+int set_alias(char *name, char *value, glob_t *gb);
+void list_alias(glob_t *gb);
 
 #endif

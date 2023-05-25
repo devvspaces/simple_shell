@@ -44,3 +44,42 @@ char *lstrip(char *val, char *tok)
 			break;
 	return (val);
 }
+
+/**
+ * rstrip - strips toks from the right
+ * of a string.
+ *
+ * @val: string to be striped
+ * @tok: tokens to strip away
+ *
+ * Return: the pointer to the striped
+ * string.
+ */
+char *rstrip(char *val, char *tok)
+{
+	int len = _strlen(val);
+
+	for (; len >= 0; --len)
+		if (is_delim(val[len], tok) == 0)
+			val[len] = '\0';
+		else
+			break;
+	return (val);
+}
+
+/**
+ * strip - strips toks from the right
+ * and left of a string.
+ *
+ * @val: string to be striped
+ * @tok: tokens to strip away
+ *
+ * Return: the pointer to the striped
+ * string.
+ */
+char *strip(char *val, char *tok)
+{
+	val = lstrip(val, tok);
+	val = rstrip(val, tok);
+	return (val);
+}

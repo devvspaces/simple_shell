@@ -50,6 +50,12 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 		min = new_size;
 
 	mem = malloc(new_size);
+	if (mem == NULL)
+	{
+		free(mem);
+		return (NULL);
+	}
+
 	r_memset(mem, ptr, min);
 	free(ptr);
 	return (mem);

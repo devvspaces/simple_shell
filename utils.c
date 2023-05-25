@@ -39,9 +39,26 @@ void free_argv(char **argv)
 	int i = 0;
 
 	for (; argv[i] != NULL; i++)
-	{
 		/* printf("Freeing: %s %p--\n", argv[i], (void *)argv[i]); */
 		free(argv[i]);
-	}
 	free(argv);
+}
+
+/**
+ * free_alias - clear aliases
+ *
+ * @gb: globals
+ */
+void free_alias(glob_t *gb)
+{
+	int i = 0;
+
+	for (; gb->aliases[i]->name != NULL; i++)
+	{
+		free(gb->aliases[i]->name);
+		free(gb->aliases[i]->value);
+		free(gb->aliases[i]);
+	}
+	free(gb->aliases[i]);
+	free(gb->aliases);
 }

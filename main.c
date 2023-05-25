@@ -23,6 +23,7 @@ int main(int ac, char **av)
 	gb->cmd_count = 0;
 	gb->environ = clone_env();
 	gb->exit_status = 0;
+	gb->aliases = init_aliases();
 
 	if (gb->environ == NULL)
 		return (1);
@@ -39,14 +40,14 @@ int main(int ac, char **av)
 		{
 			if (atty == 1)
 				write_stdout("\n");
-			free(lineptr), free_env(gb), free(gb), exit(ext);
+			free(lineptr), free_env(gb), free_alias(gb), free(gb), exit(ext);
 		}
 		gb->cmd_count++;
 		gb->exit_status = exec_cmd(lineptr, nstr_read, gb);
 		n = 0;
 	}
 
-	free(lineptr), free_env(gb), free(gb);
+	free(lineptr), free_env(gb), free_alias(gb), free(gb);
 	(void)ac;
 	return (gb->exit_status);
 }

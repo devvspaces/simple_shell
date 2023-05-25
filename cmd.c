@@ -130,7 +130,7 @@ int exec_logical_cmd(char **pcmd, char *cmd, glob_t *gb)
 	tok = parse_logical_op(cmd, &op, gb);
 	while (tok != NULL)
 	{
-		argv = parse_command(tok, _strlen(tok));
+		argv = get_str_tokens(tok, " ");
 		if (argv == NULL)
 			return (1);
 		exit_status = runcmd(pcmd, argv, gb);
@@ -163,7 +163,7 @@ int exec_cmd(char *line, int len, glob_t *gb)
 	line_copy = clone_str(line);
 	if (line_copy == NULL)
 		return (free(line_copy), free(line), 1);
-	commands = parse_commands(line_copy, len);
+	commands = get_str_tokens(line_copy, ";");
 	free(line_copy);
 	if (commands == NULL)
 		return (free(line), 1);
@@ -185,12 +185,12 @@ int exec_cmd(char *line, int len, glob_t *gb)
 	}
 	free_argv(commands);
 
-	commands = parse_commands(line, len);
+	commands = get_str_tokens(line, ";");
 	free(line);
 	if (commands == NULL)
 		return (1);
 	for (ptr = 0; commands[ptr] != NULL; ptr++)
 		exit_status = exec_logical_cmd(commands, commands[ptr], gb);
-	free_argv(commands);
+	free_argv(commands), (void)len;
 	return (exit_status);
 }

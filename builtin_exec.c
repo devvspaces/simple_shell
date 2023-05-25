@@ -16,6 +16,7 @@ int (*is_builtin(char *name))(char **, int, char **, glob_t *)
 		{"setenv", _bi_setenv},
 		{"unsetenv", _bi_unsetenv},
 		{"cd", _bi_cd},
+		{"alias", _bi_alias},
 		{NULL, NULL}};
 	int i = 0;
 
