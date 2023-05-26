@@ -1,6 +1,41 @@
 #include "main.h"
 
 /**
+ * is_command - checks if a
+ * command is a command or a file
+ *
+ * @cmd: command arg
+ *
+ * Return: 1 if command else 0
+ */
+int is_command(char *cmd)
+{
+	char *ptr = cmd;
+
+	for (; *ptr != '\0'; ptr++)
+	{
+		if (*ptr != '.' && *ptr != ' ')
+			return (1);
+		if (*ptr == '.')
+		{
+			++ptr;
+			break;
+		}
+	}
+
+	for (; *ptr != '\0'; ptr++)
+	{
+		if (*ptr != '.' && *ptr != ' ' && *ptr != '/')
+			return (1);
+
+		if (*ptr == '/')
+			return (0);
+	}
+
+	return (1);
+}
+
+/**
  * which - finds the path
  * to a command
  *
@@ -16,6 +51,8 @@ char *which(char *cmd, glob_t *gb)
 	size_t cmd_len;
 	struct stat file_stat;
 
+	if ((is_command(cmd) == 0) && (stat(cmd, &file_stat) == 0))
+		return (clone_str(cmd));
 	path = _getenv("PATH", gb);
 	if (path)
 	{
