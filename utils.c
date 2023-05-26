@@ -62,3 +62,14 @@ void free_alias(glob_t *gb)
 	free(gb->aliases[i]);
 	free(gb->aliases);
 }
+
+/**
+ * free_gb - free globals
+ * , it env and aliases
+ *
+ * @gb: globals
+ */
+void free_gb(glob_t *gb)
+{
+	free_env(gb), free_alias(gb), free(gb);
+}

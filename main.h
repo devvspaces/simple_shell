@@ -54,6 +54,7 @@ char *_itoa(int num);
 void free_alias(glob_t *gb);
 void free_env(glob_t *gb);
 void free_argv(char **argv);
+void free_gb(glob_t *gb);
 
 /* String helpers */
 char *_strcat(char *dest, const char *src);

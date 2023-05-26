@@ -34,8 +34,6 @@ int _bi_exit(char **commands, int ac, char **argv, glob_t *gb)
 	}
 	free_argv(argv);
 	free_argv(commands);
-	free_env(gb);
-	free_alias(gb);
-	free(gb);
+	free_gb(gb);
 	exit(status % 256);
 }

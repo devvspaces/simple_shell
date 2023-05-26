@@ -85,7 +85,7 @@ int main(int ac, char **av)
 
 	fd = ac != 1 ? open_file(av[1], gb) : STDIN_FILENO;
 	if (fd == -1)
-		return (1);
+		return (free_gb(gb), 2);
 
 	atty = isatty(fd);
 	while (1)
@@ -99,13 +99,13 @@ int main(int ac, char **av)
 		{
 			if (atty == 1)
 				write_stdout("\n");
-			free(lineptr), free_env(gb), free_alias(gb), free(gb), exit(ext);
+			free(lineptr), free_gb(gb), exit(ext);
 		}
 		gb->cmd_count++;
 		gb->exit_status = exec_cmd(lineptr, nstr_read, gb);
 		n = 0;
 	}
-	free(lineptr), free_env(gb), free_alias(gb), free(gb);
+	free(lineptr), free_gb(gb);
 	(void)ac;
 	return (gb->exit_status);
 }
