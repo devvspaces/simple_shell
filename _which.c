@@ -16,13 +16,11 @@ char *which(char *cmd, glob_t *gb)
 	size_t cmd_len;
 	struct stat file_stat;
 
-	if (stat(cmd, &file_stat) == 0)
-		return (clone_str(cmd));
 	path = _getenv("PATH", gb);
 	if (path)
 	{
 		cmd_len = _strlen(cmd);
-		path_clone = strdup(path);
+		path_clone = clone_str(path);
 		tok = _strtok(path_clone, ":");
 		while (tok != NULL)
 		{
