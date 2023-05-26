@@ -14,17 +14,6 @@ int is_command(char *cmd)
 
 	for (; *ptr != '\0'; ptr++)
 	{
-		if (*ptr != '.' && *ptr != ' ')
-			return (1);
-		if (*ptr == '.')
-		{
-			++ptr;
-			break;
-		}
-	}
-
-	for (; *ptr != '\0'; ptr++)
-	{
 		if (*ptr != '.' && *ptr != ' ' && *ptr != '/')
 			return (1);
 
