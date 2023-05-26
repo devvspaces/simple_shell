@@ -15,7 +15,7 @@ void file_open_error(char *path, glob_t *gb)
 	write_stderr(gb->name);
 	write_stderr(": ");
 	write_stderr(cmd_count_str);
-	write_stderr(": cannot open");
+	write_stderr(": cannot open ");
 	write_stderr(path);
 	write_stderr(": No such file");
 	free(cmd_count_str);
