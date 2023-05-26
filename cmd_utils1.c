@@ -26,32 +26,33 @@ void *syntax_format(char cause, glob_t *gb)
  */
 void handle_comment(char *input)
 {
-	int inDoubleQuotes = 0;
-	int inSingleQuotes = 0;
-	int inEscape = 0;
+	int inDq = 0, inSq = 0;
+	int inE = 0, notS = 0;
 	char *current = input;
 
 	while (*current != '\0')
 	{
 		if (*current == '"')
 		{
-			if (!inEscape && !inSingleQuotes)
-				inDoubleQuotes = !inDoubleQuotes;
+			if (!inE && !inSq)
+				inDq = !inDq;
 		}
 		else if (*current == '\'')
 		{
-			if (!inEscape && !inDoubleQuotes)
-				inSingleQuotes = !inSingleQuotes;
+			if (!inE && !inDq)
+				inSq = !inSq;
 		}
-		else if (*current == '#' && !inDoubleQuotes && !inSingleQuotes && !inEscape)
+		else if (*current == '#' && !inDq && !inSq && !inE && !notS)
 		{
 			*current = '\0';
 			break;
 		}
+		else if (*current != ' ')
+			notS = 1;
 		else if (*current == '\\')
-			inEscape = !inEscape;
+			inE = !inE;
 		else
-			inEscape = 0;
+			inE = 0, notS = 0;
 		current++;
 	}
 }

@@ -14,10 +14,16 @@ int _getenv_idx(const char *name, glob_t *gb)
 {
 	int i = 0;
 	int len = _strlen(name);
+	char *temp;
 
 	for (; gb->environ[i] != NULL; i++)
 		if (_strncmp(gb->environ[i], name, len) == 0)
-			return (i);
+		{
+			temp = gb->environ[i];
+			temp += len;
+			if (*temp == '=')
+				return (i);
+		}
 	return (-1);
 }
 

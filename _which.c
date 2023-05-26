@@ -42,6 +42,7 @@ char *which(char *cmd, glob_t *gb)
 
 	if ((is_command(cmd) == 0) && (stat(cmd, &file_stat) == 0))
 		return (clone_str(cmd));
+
 	path = _getenv("PATH", gb);
 	if (path)
 	{
@@ -52,19 +53,12 @@ char *which(char *cmd, glob_t *gb)
 		{
 			file_path = malloc(_strlen(tok) + cmd_len + 2);
 			if (file_path == NULL)
-			{
-				free(file_path);
-				return (NULL);
-			}
+				return (free(path_clone), free(file_path), NULL);
 			_strcpy(file_path, tok);
 			_strcat(file_path, "/");
 			_strcat(file_path, cmd);
-			_strcat(file_path, "\0");
 			if (stat(file_path, &file_stat) == 0)
-			{
-				free(path_clone);
-				return (file_path);
-			}
+				return (free(path_clone), file_path);
 			tok = _strtok(NULL, ":");
 			free(file_path);
 		}

@@ -142,6 +142,8 @@ int exec_cmd(char *line, int len, glob_t *gb)
 	int ptr, exit_status = 0;
 
 	handle_comment(line);
+	if (*line == '\0')
+		return (free(line), 0);
 
 	line = replace_variables(line, gb);
 	if (line == NULL)
